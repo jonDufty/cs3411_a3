@@ -42,7 +42,7 @@ class MonteCarlo:
     # Run simulation for expanded node
     # Randomly select down until an end state is reached
     def run_simulation(self, node):
-        # Create temporary node and state
+        # Create temporary node and state (board)
         temp_state = node.state
         while(tem_state.status.IN_PROGRESS):
             next_move = temp_state.random_move()
@@ -153,19 +153,35 @@ class Node:
         self.visit    = 0
         self.children = []
 
+    #select a random move from this node
+    def random_move():
+        n = np.random.randint(1,9)
+        while self.board[self.curr][n] != 0:
+            n = np.random.randint(1,9)
+        return n
+    #update the positions on the board with the move
+    def make_move(move):
+        self.board = move.get_board()
+        self.curr  = move.get_curr()
+
+
     #add a child to this node
     def add_child(Node):
         self.children.append(Node)
+
+        
     def get_children():
         return self.children
-
     def get_visit():
         return visit
+    def get_board():
+        return self.board
+    def get_curr():
+        return self.curr
 
     #set the parent of this node to the one passed into the argument
     def set_parent(Node):
         self.parent = Node
-
     def set_win(win):
         self.win = win
     def set_visit(visit):
