@@ -24,10 +24,14 @@ class MonteCarlo:
         # Pick node with best statistic
         return move
 
-#these are nodes, that will make up the tree
+#these are nodes, that will make up the tree, this is a representation of the big board i.e. the 9x9 board
+#
 class Board(object):
-    def start(self):
+    def start(self, board, current_board):
         # Returns a representation of the starting state of the game.
+        self.board       = board
+        self.curr        = current_board
+        self.curr_player = 1
         pass
 
     def current_player(self, state):
@@ -36,6 +40,18 @@ class Board(object):
         pass
 
     def next_state(self, state, play):
+        opponent = 3 - current_player()
+        tree = new Tree() #need to create a tree class???
+        establish the root node
+
+        while time is less than t seconds:
+            selectRootNode
+            ExpandFurther
+            check if child node has legal moves available
+            simulate the playout from the child
+            BACKPROPyo(child)
+        winnerNode = child of root with max score()
+
         # Takes the game state, and the move to be applied.
         # Returns the new game state.
         pass
