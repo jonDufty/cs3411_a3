@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-# Sample starter bot by Zac Partrdige
+# Sample starter bot by Zac Partridge
+# Contact me at z.partridge@unsw.edu.au
 # 06/04/19
 # Feel free to use this and modify it however you wish
 
@@ -14,15 +15,15 @@ import numpy as np
 
 # the boards are of size 10 because index 0 isn't used
 boards = np.zeros((10, 10), dtype="int8")
+s = [".","X","O"]
 curr = 0 # this is the current board to play in
 
 # print a row
 # This is just ported from game.c
 def print_board_row(board, a, b, c, i, j, k):
-    # The marking script doesn't seem to like this either, so just take it out to submit
-    print("", board[a][i], board[a][j], board[a][k], end = " | ")
-    print(board[b][i], board[b][j], board[b][k], end = " | ")
-    print(board[c][i], board[c][j], board[c][k])
+    print(" "+s[board[a][i]]+" "+s[board[a][j]]+" "+s[board[a][k]]+" | " \
+             +s[board[b][i]]+" "+s[board[b][j]]+" "+s[board[b][k]]+" | " \
+             +s[board[c][i]]+" "+s[board[c][j]]+" "+s[board[c][k]])
 
 # Print the entire board
 # This is just ported from game.c
@@ -40,10 +41,33 @@ def print_board(board):
     print_board_row(board, 7,8,9,7,8,9)
     print()
 
+#return an array of numbers that represent legal moves in the current board state
+#i.e. it will return [1,2,5,8] as legal moves:
+"""
+_____
+. . X
+O . O
+X . X
+_____
+""" 
+def find_legal_moves():
+    global curr
+    curr_board = boards[curr]
+    curr_board = curr_board[1:]
+    legal_moves = []
+    i = 1
+    for x in curr_board:
+        if x != 1 && x != 2:
+            legal_moves.append(i)
+        i++
+
+    print("Broad Number: ", curr)
+    print(*curr_board, sep = ',')
+
 # choose a move to play
 def play():
-    # print_board(boards)
-
+    #print_board(boards)
+    find_legal_moves()
     # just play a random move for now
     n = np.random.randint(1,9)
     while boards[curr][n] != 0:
