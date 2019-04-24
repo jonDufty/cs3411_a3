@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-#MCTS implementation by Jon Duffy and Nimrod Wynneimport datetime class MonteCarlo:    def __init__(self):        pass    # select node to expand based on UCT    def select_node(self):        pass    # Expands selected node to find potential moves    def expand_node(self):        pass    # Run simulation for expanded node    def run_simulation(self):        pass    def get_move(self):        move = None        self.select_node()        self.expand_node()        self.run_simulation()        # Pick node with best statistic        return move#these are nodes, that will make up the tree, this is a representation of the big board i.e. the 9x9 board#class Board(object):    def __init__(self):        self.board               self.curr                self.curr_player    def start(self, board, current_board):        # Returns a representation of the starting state of the game.        self.board       = board        self.curr        = current_board        self.curr_player = 1    def current_player(self, state):        # Takes the game state and returns the current player's        # number.        pass    def next_state(self, state, play):        opponent = 3 - current_player()        #root node has no parent        root_node = Node(board, curr, None)        tree = Tree()        tree.set_root(root_node)        while time is less than t seconds:            selectRootNode            ExpandFurther            if len(find_legal_moves(self.board, self.curr)) > 0:                simulatePlayout                Backprop dat child        children = root_node.get_children()        max_child = children[0]        for x in children:            if x.get_visit > max_child.get_visit():                max_child = x        winnerNode = max_child        # Takes the game state, and the move to be applied.        # Returns the new game state.        pass    #returns all the current legal moves of the board    def find_legal_moves(in_board, board_num):        curr_board = in_board[board_num]        curr_board = curr_board[1:]        legal_moves = []        i = 1        for x in curr_board:            if x == 0:                legal_moves.append(i)            i += 1        return legal_moves    def legal_plays(self, state_history):        # Takes a sequence of game states representing the full        # game history, and returns the full list of moves that        # are legal plays for the current player.        pass    def winner(self, state_history):        # Takes a sequence of game states representing the full        # game history.  If the game is now won, return the player        # number.  If the game is still ongoing, return zero.  If        # the game is tied, return a different distinct value, e.g. -1.        passclass Tree:    def __init__:        self.root = None    def set_root(Node):        self.root = Nodeclass Node:    def __init__(self, board, curr, parent):        self.board    = board        self.curr     = curr        self.parent   = parent        self.win      = 0        self.visit    = 0        self.children = []    #add a child to this node    def add_child(Node):        self.children.append(Node)    def get_children():        return self.children    def get_visit():        return visit    #set the parent of this node to the one passed into the argument    def set_parent(Node):        self.parent = Node    def set_win(win):        self.win = win    def set_visit(visit):        self.visit = visit    def inc_win(win):        self.win += win    def inc_visit(visit):        self.visit += visit
-=======
-#MCTS implementation by Jon Duffy and Nimrod Wynne
+#MCTS implementation by Jon Dufty and Nimrod Wynne
+
+import datetime 
 
 class MonteCarlo:
     def __init__(self):
@@ -82,6 +81,7 @@ class Board(object):
         self.curr        = current_board
         self.curr_player = 1
 
+
     def current_player(self, state):
         # Takes the game state and returns the current player's
         # number.
@@ -89,16 +89,25 @@ class Board(object):
 
     def next_state(self, state, play):
         opponent = 3 - current_player()
-        tree = new Tree() #need to create a tree class???
-        establish the root node
+        #root node has no parent
+        root_node = Node(board, curr, None)
+        tree = Tree()
+        tree.set_root(root_node)
 
         while time is less than t seconds:
             selectRootNode
             ExpandFurther
-            check if child node has legal moves available
-            simulate the playout from the child
-            BACKPROPyo(child)
-        winnerNode = child of root with max score()
+            if len(find_legal_moves(self.board, self.curr)) > 0:
+                simulatePlayout
+                Backprop dat child
+
+        children = root_node.get_children()
+        max_child = children[0]
+        for x in children:
+            if x.get_visit > max_child.get_visit():
+                max_child = x
+
+        winnerNode = max_child
 
         # Takes the game state, and the move to be applied.
         # Returns the new game state.
@@ -147,6 +156,11 @@ class Node:
     #add a child to this node
     def add_child(Node):
         self.children.append(Node)
+    def get_children():
+        return self.children
+
+    def get_visit():
+        return visit
 
     #set the parent of this node to the one passed into the argument
     def set_parent(Node):
@@ -161,4 +175,3 @@ class Node:
         self.win += win
     def inc_visit(visit):
         self.visit += visit
->>>>>>> 352f24015dae4dbb4c3bdd23dc2173fb5d3173c0
