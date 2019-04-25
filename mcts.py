@@ -25,17 +25,18 @@ class MonteCarlo:
         if (node.children is None):
             return self
         else:
+            #Question? Is this the same process that happens in next_state on line 119/120??
             node = tree.max_ucb_node(node)
             return select_node(node)
 
     # Expands selected node to find potential moves
     def expand_node(self, node):
         # Find legal moves
-        moves = get_legal_moves(node.state)
+        moves = find_legal_moves(node.get_state())
         for m in moves:
             # Create new node for each child and add to child array
-            new = Node(next_state, player = opponent, parent=node)
-            node.child.append(new)
+            new = Node(self, state, parent=node)
+            node.add_child(new)
         return random(moves)
 
 
@@ -48,15 +49,22 @@ class MonteCarlo:
             next_move = temp_state.random_move()
             temp_state.make_move(next_move)
         return temp_state
+        #Question? Rewriting the above code with the written functions/structure, does it make sense?
+        temp_state = node.get_state()
+        while temp_state.get_status() == "IN_PROGRESS":
+            next_move = temp_state.random_move()
+            temp_state.make_move(next_move)
+        return temp_state
 
     def back_propogation(self, result, node):
         # Back propagate through node parernts
-        player = result.player
-        while(node.parent not None):
-            node.visit += 1
-            if(node.state.player == player):
-                node.win += 1
-            node = node.parent
+        while node.get_parent() not None:
+            #Question? what is result, is it a state or is it a node
+            player = result.player
+                node.get_visit() += 1
+                if(node.get_state().get_player() == player):
+                    node.set_win() += 1
+                node = node.get_parent()
 
 
     def best_move(self, root):
@@ -67,6 +75,12 @@ class MonteCarlo:
             if m.probability > max.probability:
                max = m
         return max
+        #Question? should the above be replaced by this code, i think it's the same thing but with existing functions
+        children = root_node.get_children()
+        max_child = children[0]
+        for x in children:
+            if x.get_visit > max_child.get_visit():
+                max_child = x
 
 #these are nodes, that will make up the tree, this is a representation of the big board i.e. the 9x9 board
 #
@@ -94,12 +108,13 @@ class Board(object):
         tree = Tree()
         tree.set_root(root_node)
 
-        while time is less than t seconds:
-            selectRootNode
-            ExpandFurther
-            if len(find_legal_moves(self.board, self.curr)) > 0:
-                simulatePlayout
-                Backprop dat child
+        #Question? Is this in the wrong place, it looks like you added it above (talking about the code block below)
+        # while time is less than t seconds:
+        #     selectRootNode
+        #     ExpandFurther
+        #     if len(find_legal_moves(self.board, self.curr)) > 0:
+        #         simulatePlayout
+        #         Backprop dat child
 
         children = root_node.get_children()
         max_child = children[0]
@@ -144,14 +159,31 @@ class Tree:
     def set_root(Node):
         self.root = Node
 
+#state class contains the board, current 'subboard' and the player whose turn it is
+def State:
+    def __init__(self, board, curr, player):
+        self.board  = board
+        self.curr   = curr
+        self.player = player
+    def get_player():
+        return self.player
+    def get_board():
+        return self.board
+    def get_curr():
+        return self.curr
+    def set_board(board):
+        self.board = board
+    def set_curr(curr):
+        self.curr = curr
+
 class Node:
-    def __init__(self, board, curr, parent):
-        self.board    = board
-        self.curr     = curr
-        self.parent   = parent
-        self.win      = 0
-        self.visit    = 0
-        self.children = []
+    def __init__(self, state, parent):
+        self.curr_state = state
+        self.parent     = parent
+        self.win        = 0
+        self.visit      = 0
+        self.children   = []
+        self.status     = "IN_PROGRESS" #In progress by default, should make an enum for this
 
     #select a random move from this node
     def random_move():
@@ -159,21 +191,26 @@ class Node:
         while self.board[self.curr][n] != 0:
             n = np.random.randint(1,9)
         return n
+
     #update the positions on the board with the move
     def make_move(move):
-        self.board = move.get_board()
-        self.curr  = move.get_curr()
-
+        self.curr_state.set_board(move.get_board())
+        self.curr_state.set_curr(move.get_curr())
 
     #add a child to this node
     def add_child(Node):
         self.children.append(Node)
 
-        
+    def get_state():
+        return self.state      
+    def get_status():
+        return self.status  
     def get_children():
         return self.children
+    def get_parent():
+        return self.parent
     def get_visit():
-        return visit
+        return self.visit
     def get_board():
         return self.board
     def get_curr():
