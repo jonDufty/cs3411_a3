@@ -26,6 +26,7 @@ class MonteCarlo:
             return self
         else:
             #Question? Is this the same process that happens in next_state on line 119/120??
+            # A: Similar for the select node part, but the part in next_state checks if there are legal moves, this checks if the node has been expanded yet
             node = tree.max_ucb_node(node)
             return select_node(node)
 
@@ -50,6 +51,7 @@ class MonteCarlo:
             temp_state.make_move(next_move)
         return temp_state
         #Question? Rewriting the above code with the written functions/structure, does it make sense?
+        # A: Happy with that
         temp_state = node.get_state()
         while temp_state.get_status() == "IN_PROGRESS":
             next_move = temp_state.random_move()
@@ -76,6 +78,7 @@ class MonteCarlo:
                max = m
         return max
         #Question? should the above be replaced by this code, i think it's the same thing but with existing functions
+        # A: Yep cool with that
         children = root_node.get_children()
         max_child = children[0]
         for x in children:
@@ -109,6 +112,7 @@ class Board(object):
         tree.set_root(root_node)
 
         #Question? Is this in the wrong place, it looks like you added it above (talking about the code block below)
+        # A: Yes I think it should be in the MCTS class because thats the part thats actually times
         # while time is less than t seconds:
         #     selectRootNode
         #     ExpandFurther
