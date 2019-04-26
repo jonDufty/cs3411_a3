@@ -22,7 +22,8 @@ class MonteCarlo:
     # select node to expand based on UCT
     # Traverse through tree recursively until finding leaf
     def select_node(self):
-        if (node.children is None):
+        children = node.get_children()
+        if not children:
             return self
         else:
             #Question? Is this the same process that happens in next_state on line 119/120??
@@ -45,13 +46,6 @@ class MonteCarlo:
     # Randomly select down until an end state is reached
     def run_simulation(self, node):
         # Create temporary node and state (board)
-        temp_state = node.state
-        while(tem_state.status.IN_PROGRESS):
-            next_move = temp_state.random_move()
-            temp_state.make_move(next_move)
-        return temp_state
-        #Question? Rewriting the above code with the written functions/structure, does it make sense?
-        # A: Happy with that
         temp_state = node.get_state()
         while temp_state.get_status() == "IN_PROGRESS":
             next_move = temp_state.random_move()
@@ -71,19 +65,16 @@ class MonteCarlo:
 
     def best_move(self, root):
         # Pick node with best statistic
-        moves = root.child
-        max = moves[0]
-        for m in moves:
-            if m.probability > max.probability:
-               max = m
-        return max
-        #Question? should the above be replaced by this code, i think it's the same thing but with existing functions
-        # A: Yep cool with that
         children = root_node.get_children()
-        max_child = children[0]
-        for x in children:
-            if x.get_visit > max_child.get_visit():
-                max_child = x
+        if not children:
+            print("No children!!!")
+            return -1
+        else: 
+            max_child = children[0]
+            for x in children:
+                if x.get_visit > max_child.get_visit():
+                    max_child = x
+            return max_child
 
 #these are nodes, that will make up the tree, this is a representation of the big board i.e. the 9x9 board
 #
@@ -120,13 +111,13 @@ class Board(object):
         #         simulatePlayout
         #         Backprop dat child
 
-        children = root_node.get_children()
-        max_child = children[0]
-        for x in children:
-            if x.get_visit > max_child.get_visit():
-                max_child = x
+        # children = root_node.get_children()
+        # max_child = children[0]
+        # for x in children:
+        #     if x.get_visit > max_child.get_visit():
+        #         max_child = x
 
-        winnerNode = max_child
+        # winnerNode = max_child
 
         # Takes the game state, and the move to be applied.
         # Returns the new game state.
@@ -162,6 +153,16 @@ class Tree:
         self.root = None
     def set_root(Node):
         self.root = Node
+    #this function finds the max ucb value of a node's children
+    def ucb(node, n, t):
+        wi = node.get_win()
+        ni = #number of sims in this node after the ith move
+        c  = 1.414 #root 2
+        t  = #total sims after i moves
+        return res
+    def max_ucb_node(node):
+        
+
 
 #state class contains the board, current 'subboard' and the player whose turn it is
 def State:
@@ -215,6 +216,8 @@ class Node:
         return self.parent
     def get_visit():
         return self.visit
+    def get_win():
+        return self.win
     def get_board():
         return self.board
     def get_curr():
