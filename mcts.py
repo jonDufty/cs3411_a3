@@ -1,6 +1,7 @@
+#!/usr/bin/python3
 #MCTS implementation by Jon Dufty and Nimrod Wynne
 
-import datetime 
+# import datetime 
 
 class MonteCarlo:
     def __init__(self):
@@ -54,12 +55,12 @@ class MonteCarlo:
 
     def back_propogation(self, result, node):
         # Back propagate through node parernts
-        while node.get_parent() not None:
+        while node.get_parent() is not None:
             #Question? what is result, is it a state or is it a node
             player = result.player
-                node.get_visit() += 1
-                if(node.get_state().get_player() == player):
-                    node.set_win() += 1
+            node.inc_visit(1)
+            if(node.get_state().get_player() == player):
+                node.inc_win(1)
                 node = node.get_parent()
 
 
@@ -149,23 +150,28 @@ class Board(object):
         pass
 
 class Tree:
-    def __init__:
+    def __init__(self):
         self.root = None
     def set_root(Node):
         self.root = Node
     #this function finds the max ucb value of a node's children
-    def ucb(node, n, t):
+    def ucb(node):
+        #WARNING! The ni and t have to be brought from somewhere
         wi = node.get_win()
-        ni = #number of sims in this node after the ith move
+        ni = node.num_sims #number of sims in this node after the ith move
         c  = 1.414 #root 2
-        t  = #total sims after i moves
+        t  = node.total_sims #total sims after i moves
         return res
     def max_ucb_node(node):
-        
+        children = node.get_children()
+        map(ucb, children)
+        return max(chilren)
+
+
 
 
 #state class contains the board, current 'subboard' and the player whose turn it is
-def State:
+class State:
     def __init__(self, board, curr, player):
         self.board  = board
         self.curr   = curr
