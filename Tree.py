@@ -1,5 +1,5 @@
 from Board import Board
-from math import math
+import math
 from random import random
 
 class Node():
