@@ -6,7 +6,7 @@ import math
 
 class MonteCarlo:
     def __init__(self):
-        pass
+        print("Initialising MCTS")
 
     def find_next_move(self, state):
         # create new tree
@@ -91,6 +91,51 @@ class Board(object):
         self.curr        = current_board
         self.curr_player = 1
 
+    #Agent Victory  : 1
+    #Opponent Vic   : 2
+    #Draw           : 3
+    #Non-final state: 0
+    def check_victory():
+        board = self.board[self.curr]
+        # empty = 0, I played = 1, they played = 2
+        if board[1] == board[2] == board[3] == 1:
+            return 1
+        if board[1] == board[4] == board[7] == 1:
+            return 1
+        if board[1] == board[5] == board[9] == 1:
+            return 1
+        if board[2] == board[5] == board[8] == 1:
+            return 1
+        if board[3] == board[6] == board[9] == 1:
+            return 1
+        if board[3] == board[5] == board[7] == 1:
+            return 1
+        #check opponent positions    
+        if board[4] == board[5] == board[6] == 2:
+            return 2
+        if board[7] == board[8] == board[9] == 2:
+            return 2
+        if board[1] == board[2] == board[3] == 2:
+            return 2
+        if board[1] == board[4] == board[7] == 2:
+            return 2
+        if board[1] == board[5] == board[9] == 2:
+            return 2
+        if board[2] == board[5] == board[8] == 2:
+            return 2
+        if board[3] == board[6] == board[9] == 2:
+            return 2
+        if board[3] == board[5] == board[7] == 2:
+            return 2
+        if board[4] == board[5] == board[6] == 2:
+            return 2
+        if board[7] == board[8] == board[9] == 2:
+            return 2 
+        #check draw state
+        if all(x != 0 for x in board):
+            return 3
+        #if agent and opponent have not won, and it's not a draw, it's a non-win state
+        return 0   
 
     def current_player(self, state):
         # Takes the game state and returns the current player's
