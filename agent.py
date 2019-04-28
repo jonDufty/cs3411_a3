@@ -80,7 +80,6 @@ def play():
     # n = np.random.randint(1,9)
     # while boards[curr][n] != 0:
     #     n = np.random.randint(1,9)
-
     mcts = MCTS(g_board)
     n = mcts.find_next_move()
     print("Best move found: ", n)

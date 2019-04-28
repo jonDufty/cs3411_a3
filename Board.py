@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-import random
 
+import random
 # Board class representing actual game state
 class Board(object):
     

@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 #MCTS implementation by Jon Dufty and Nimrod Wynne
 
-import datetime
 import random
+import datetime
 import copy
 from Board import Board
 from Tree import *
+
 
 class MCTS:
     def __init__(self, state, limit = 1):
@@ -44,7 +45,7 @@ class MCTS:
         print("Exited while loop")
         return self.best_move(root)
 
-    # select node to expand based on UCT
+    # select node to expand based on UCB
     # Traverse through tree recursively until finding leaf
     def select_node(self,node):
         children = node.children
@@ -62,14 +63,12 @@ class MCTS:
         # Find legal moves
         if node.state.in_progress is False:
             return node
-
         moves = node.state.find_legal_moves()
         print(moves)
         for m in moves:
             # Create new node for each child and add to child array
             new_state = copy.deepcopy(node.state)
-            res = new_state.make_move(m)
-            # print(vars(new_state))
+            # res = new_state.make_move(m)
             new = Node(new_state, m, node)
             node.add_child(new) 
         return random.choice(node.children)
@@ -86,8 +85,6 @@ class MCTS:
             next_move = temp_state.random_move()
             result = temp_state.make_move(next_move)
             # print(f"run_sim - result = {result}, progress = {temp_state.in_progress}")
-        print(f"run_sim return - result = {result}")
-        # print(temp_state.board)
         return result
 
 
@@ -129,17 +126,17 @@ class MCTS:
 
 """
 
-if __name__ == "__main__":
-    import numpy as np
-    import random
-    # the boards are of size 10 because index 0 isn't used
-    boards = np.zeros((10, 10), dtype="int8")
-    s = [".","X","O"]
-    curr = 1 # this is the current board to play in
+# if __name__ == "__main__":
+#     import numpy as np
+#     import random
+#     # the boards are of size 10 because index 0 isn't used
+#     boards = np.zeros((10, 10), dtype="int8")
+#     s = [".","X","O"]
+#     curr = 1 # this is the current board to play in
 
-    # Create global board object
-    g_board = Board(boards,curr)
-    print(g_board.board)
-    test = MCTS(g_board)
-    n = test.find_next_move()
-    print(n)
+#     # Create global board object
+#     g_board = Board(boards,curr)
+#     print(g_board.board)
+#     test = MCTS(g_board)
+#     n = test.find_next_move()
+#     print(n)

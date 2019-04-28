@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from Board import Board
 import math
-from random import random
+
 
 class Node():
     n_sims = 0
@@ -25,9 +25,8 @@ class Node():
     
     #Finds the max ucb value of a node's children
     def ucb(self):
-        #WARNING! The ni and t have to be brought from somewhere
         w = float(self.win)
-        n = float(self.visit)    #number of sims in this node after the ith move
+        n = float(self.visit)  
         if n == 0:
             return 1000
         c  = 1.414               #sqrt(2)
