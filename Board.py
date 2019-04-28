@@ -78,6 +78,7 @@ class Board(object):
             self._in_progress = False 
             return self.player
         elif self.full_board():
+            print("Full Board!")
             self._in_progress = False
             return 0
         else:
