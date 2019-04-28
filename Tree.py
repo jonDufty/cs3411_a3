@@ -28,8 +28,11 @@ class Node():
         #WARNING! The ni and t have to be brought from somewhere
         w = float(self.win)
         n = float(self.visit)    #number of sims in this node after the ith move
+        if n == 0:
+            return 0
         c  = 1.414               #sqrt(2)
         t  = float(Node.n_sims)  #total sims after i moves
+        # print(f"w = {w} n = {n} c = {c} t = {t}")
         res = float((w / n) + (c * math.sqrt(math.log(t) / n) ))
         return res
 
@@ -56,14 +59,14 @@ class Node():
     def board(self):
         return self._state.board
     @property
-    def get_curr(self):
+    def curr(self):
         return self._state.curr
 
     #incrementor functions
     def inc_sims(self):
         Node.n_sims += 1
     def inc_win(self):
-        self.win += 1
+        self._win += 1
     def inc_visit(self):
         self._visit += 1
 
