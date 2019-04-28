@@ -22,6 +22,10 @@ class Board(object):
     @property
     def curr(self):
         return self._curr
+    
+    @property
+    def in_progress(self):
+        return self._in_progress
 
     ''' Don't think we need this 
     
@@ -57,23 +61,24 @@ class Board(object):
     def find_legal_moves(self):
         curr_board = self.board[self.curr]
         legal_moves = []
-        i = 1
-        for x in curr_board:
-            if x == 0:
-                legal_moves.append(i)
-            i += 1
+        for x in range(1,len(curr_board)):
+            if curr_board[x] == 0:
+                legal_moves.append(x)
         return legal_moves
 
     # Takes in a move, changes board state, switches player
     # Checks for a winner
     def make_move(self, move):
+        # print("move = ",move)
         self._board[self._curr][move] = self.player
         self._curr = move
         # check winner
         if self.winner(self.player):
+            print(f"Player {self.player} wins!")
             self._in_progress = False 
             return self.player
         elif self.full_board():
+            self._in_progress = False
             return 0
         else:
             self.toggle_player()
@@ -88,7 +93,7 @@ class Board(object):
         self._player = 3 - self.player
 
     def winner(self, p):
-        curr = self.curr
+        curr = self.board[self.curr]
         return(  ( curr[1] == p and curr[2] == p and curr[3] == p )
                 or( curr[4] == p and curr[5] == p and curr[6] == p )
                 or( curr[7] == p and curr[8] == p and curr[9] == p )
@@ -99,7 +104,7 @@ class Board(object):
                 or( curr[3] == p and curr[5] == p and curr[7] == p ))
 
     def full_board(self):
-        cells = [i > 0 for i in self.curr]
+        cells = [i > 0 for i in self.board[self.curr]]
         return sum(cells) >= 9
 
 ''' Not actually sure if we need this '''
