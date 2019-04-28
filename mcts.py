@@ -23,26 +23,26 @@ class MCTS:
         
     def find_next_move(self):
         # create new tree
-        
+        # print(self.state.board)
         root = Node(self.state, -1)
         tree = Tree(root)
-
+        print("find_next_move, root.curr: ", root.curr)
         # populate with nodes
         time = datetime.datetime
         start = time.now()
         while ((time.now() - start).seconds < self.limit):
             Node.n_sims += 1
             node = self.select_node(root)
-            print(f"total sims = {Node.n_sims}, rvisit = {root.visit}, nwins = {root.win}")
-            print(f"New Node Board - curr = {node.state.curr} prog = {node.state.in_progress} \n ")
+            # print(f"total sims = {Node.n_sims}, rvisit = {root.visit}, nwins = {root.win}")
+            # print(f"New Node Board - curr = {node.state.curr} prog = {node.state.in_progress} \n ")
             # print(node.state.board)
             next_node = self.expand_node(node)
             result = self.run_simulation(next_node)
             # Update statistics for each node
-            print(f"find_next move, result = {result}")
+            # print(f"find_next move, result = {result}")
             # print(next_node.board)
             self.back_propogation(result, next_node)
-        print("Exited while loop")
+        # print("Exited while loop") 
         return self.best_move(root)
 
     # select node to expand based on UCB
@@ -64,11 +64,11 @@ class MCTS:
         if node.state.in_progress is False:
             return node
         moves = node.state.find_legal_moves()
-        print(moves)
+        # print(moves)
         for m in moves:
             # Create new node for each child and add to child array
             new_state = copy.deepcopy(node.state)
-            # res = new_state.make_move(m)
+            res = new_state.make_move(m)
             new = Node(new_state, m, node)
             node.add_child(new) 
         return random.choice(node.children)
@@ -110,10 +110,14 @@ class MCTS:
         else: 
             max_child = children[0]
             for x in children:
-                print(f"nsims = {Node.n_sims}, nvisits = {x.visit} nwins = {x.win} ucb = {x.ucb()}")
+                # print(f"nsims = {Node.n_sims}, nvisits = {x.visit} nwins = {x.win} ucb = {x.ucb()}")
                 # print(x.state.board)
                 if x.win/x.visit > max_child.win/max_child.visit:
                     max_child = x
+            print("curr board", root.curr)
+            # print(root.board[root.curr])
+            print(root.board)
+            print("legal moves = ", root.state.find_legal_moves())
             return max_child.move
 
 

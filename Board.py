@@ -74,11 +74,11 @@ class Board(object):
         self._curr = move
         # check winner
         if self.winner(self.player):
-            print(f"Player {self.player} wins!")
+            # print(f"Player {self.player} wins!")
             self._in_progress = False 
             return self.player
         elif self.full_board():
-            print("Full Board!")
+            # print("Full Board!")
             self._in_progress = False
             return 0
         else:

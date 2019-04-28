@@ -8,6 +8,7 @@ import socket
 import sys
 import numpy as np
 
+import copy
 from mcts import MCTS
 from Board import Board
 
@@ -80,19 +81,23 @@ def play():
     # n = np.random.randint(1,9)
     # while boards[curr][n] != 0:
     #     n = np.random.randint(1,9)
-    mcts = MCTS(g_board)
+    board_copy = copy.deepcopy(g_board)
+    print_board(board_copy.board)
+    mcts = MCTS(board_copy)
     n = mcts.find_next_move()
     print("Best move found: ", n)
     
     place(curr, n, 1)
-   
+    print_board(g_board.board)
     return n
 
 # place a move in the global boards
 def place(board, num, player):
     global curr
+    global g_board
     curr = num
-    boards[board][num] = player
+    g_board._curr = num
+    g_board.board[board][num] = player
 
 # read what the server sent us and
 # only parses the strings that are necessary
