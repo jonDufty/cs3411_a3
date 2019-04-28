@@ -57,13 +57,13 @@ class MCTS:
 
     # Expands selected node to find potential moves
     def expand_node(self, node):
-        # Find legal moves
+        # Find legal moves 
         moves = node.state.find_legal_moves()
         print(moves)
         # print(node.state.board)
         for m in moves:
             # Create new node for each child and add to child array
-            new_state = node.state
+            new_state = copy.deepcopy(node.state)
             r = new_state.make_move(m)
             # print(vars(new_state))
             new = Node(new_state, m, node)
@@ -77,13 +77,13 @@ class MCTS:
         # Create temporary node and state (board)
         # print(vars(node))
         temp_state = copy.deepcopy(node.state)
-        print(temp_state)
         result = 0
         while temp_state.in_progress is True:
             next_move = temp_state.random_move()
             result = temp_state.make_move(next_move)
             # print(f"run_sim - result = {result}, progress = {temp_state.in_progress}")
         # print(f"run_sim return - result = {result}")
+        print(f"After END OF PLAY \n {temp_state.board} ")
         return result
 
 
