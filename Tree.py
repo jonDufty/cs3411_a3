@@ -4,12 +4,13 @@ from random import random
 
 class Node():
     n_sims = 0
-    def __init__(self, state, parent=None):
+    def __init__(self, state, move, parent=None):
         self._state = state #the state the node represents
         self._parent     = parent #the parent of the node (None if root)
         self._win        = 0 #number of wins at this node
         self._visit      = 0 #number of visits to this node
         self._children   = [] #the children of this node
+        self._move       = move
     
 
     #add a child to this node
@@ -47,6 +48,9 @@ class Node():
     @property
     def win(self):
         return self._win
+    @property
+    def move(self):
+        return self._move
     @property
     def board(self):
         return self._state.board

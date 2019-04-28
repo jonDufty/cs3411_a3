@@ -56,7 +56,7 @@ class MCTS:
         for m in moves:
             # Create new node for each child and add to child array
             new_state = node.state.make_move(m)
-            new = Node(new_state, node)
+            new = Node(new_state, move, node)
             node.add_child(new)
         return random.choice(node.children)
 
@@ -93,4 +93,4 @@ class MCTS:
             for x in children:
                 if x.win/x.visit > max_child.win/max_child.visit:
                     max_child = x
-            return max_child
+            return max_child.move
