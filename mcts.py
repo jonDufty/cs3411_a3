@@ -43,10 +43,10 @@ class MCTS:
         if not children:
             return None
         else:
-            max = children[0]
+            max_c = children[0]
             for c in children:
-                if c.ucb() > max.ucb():
-                    max = c
+                if c.ucb() > max_c.ucb():
+                    max_c = c
             return self.select_node(max)
 
     # Expands selected node to find potential moves
