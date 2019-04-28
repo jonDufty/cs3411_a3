@@ -25,7 +25,6 @@ class Node():
     
     #Finds the max ucb value of a node's children
     def ucb(self):
-        #WARNING! The ni and t have to be brought from somewhere
         w = float(self.win)
         n = float(self.visit)    #number of sims in this node after the ith move
         c  = 1.414               #sqrt(2)
@@ -56,14 +55,14 @@ class Node():
     def board(self):
         return self._state.board
     @property
-    def get_curr(self):
+    def curr(self):
         return self._state.curr
 
     #incrementor functions
     def inc_sims(self):
         Node.n_sims += 1
     def inc_win(self):
-        self.win += 1
+        self._win += 1
     def inc_visit(self):
         self._visit += 1
 

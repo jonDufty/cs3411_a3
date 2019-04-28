@@ -37,12 +37,12 @@ class MCTS:
             self.back_propogation(result, next_node)
         return self.best_move(root)
 
-    # select node to expand based on UCT
+    # select node to expand based on UCB
     # Traverse through tree recursively until finding leaf
     def select_node(self,node):
         children = node.children
         if not children:
-            return None
+            return node
         else:
             max_c = children[0]
             for c in children:
