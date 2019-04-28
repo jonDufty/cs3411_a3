@@ -19,9 +19,9 @@ class MCTS:
     def limit(self):
         return self._limit
         
-    def find_next_move(self, state):
+    def find_next_move(self):
         # create new tree
-        tree = Tree(state)
+        tree = Tree(self._state)
         root = Tree.root
 
         # populate with nodes

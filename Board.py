@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import random
 
 # Board class representing actual game state

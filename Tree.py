@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from Board import Board
 import math
 from random import random
