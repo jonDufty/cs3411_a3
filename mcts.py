@@ -9,7 +9,7 @@ from Tree import *
 
 
 class MCTS:
-    def __init__(self, state, limit = 1):
+    def __init__(self, state, limit = 0.05):
         self._limit = limit
         self._state = state
 
@@ -26,7 +26,7 @@ class MCTS:
         # print(self.state.board)
         root = Node(self.state, -1)
         tree = Tree(root)
-        print("find_next_move, root.curr: ", root.curr)
+        # print("find_next_move, root.curr: ", root.curr)
         # populate with nodes
         time = datetime.datetime
         start = time.now()
@@ -68,7 +68,7 @@ class MCTS:
         for m in moves:
             # Create new node for each child and add to child array
             new_state = copy.deepcopy(node.state)
-            res = new_state.make_move(m)
+            new_state.make_move(m)
             new = Node(new_state, m, node)
             node.add_child(new) 
         return random.choice(node.children)
@@ -93,7 +93,6 @@ class MCTS:
         # Back propagate through node parernts
         while node.parent is not None:
             node.inc_visit()
-            # print("visit= ",node.visit, "wins= ", node.win)
             if(node.state.player is result):
                 node.inc_win()
             node = node.parent
@@ -110,14 +109,16 @@ class MCTS:
         else: 
             max_child = children[0]
             for x in children:
-                # print(f"nsims = {Node.n_sims}, nvisits = {x.visit} nwins = {x.win} ucb = {x.ucb()}")
+                print(f"player is {x.state.player}")
+                print(f"nsims = {Node.n_sims}, nprob = {x.win/x.visit} move = {x.move} ucb = {x.ucb()}")
                 # print(x.state.board)
-                if x.win/x.visit > max_child.win/max_child.visit:
+                if x.win/x.visit < max_child.win/max_child.visit:
                     max_child = x
             print("curr board", root.curr)
-            # print(root.board[root.curr])
-            print(root.board)
+            print(root.board[root.curr])
+            # print(root.board)
             print("legal moves = ", root.state.find_legal_moves())
+            print("best move = ",max_child.move)
             return max_child.move
 
 
