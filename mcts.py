@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 #MCTS implementation by Jon Dufty and Nimrod Wynne
 
-import datetime
 import random
+import datetime
 import copy
 from Board import Board
 from Tree import *
+
 
 class MCTS:
     def __init__(self, state, limit = 1):
@@ -125,17 +126,17 @@ class MCTS:
 
 """
 
-if __name__ == "__main__":
-    import numpy as np
-    import random
-    # the boards are of size 10 because index 0 isn't used
-    boards = np.zeros((10, 10), dtype="int8")
-    s = [".","X","O"]
-    curr = 1 # this is the current board to play in
+# if __name__ == "__main__":
+#     import numpy as np
+#     import random
+#     # the boards are of size 10 because index 0 isn't used
+#     boards = np.zeros((10, 10), dtype="int8")
+#     s = [".","X","O"]
+#     curr = 1 # this is the current board to play in
 
-    # Create global board object
-    g_board = Board(boards,curr)
-    print(g_board.board)
-    test = MCTS(g_board)
-    n = test.find_next_move()
-    print(n)
+#     # Create global board object
+#     g_board = Board(boards,curr)
+#     print(g_board.board)
+#     test = MCTS(g_board)
+#     n = test.find_next_move()
+#     print(n)
