@@ -8,7 +8,7 @@ from Board import Board
 from Tree import *
 
 class MCTS:
-    def __init__(self, state, limit = 10):
+    def __init__(self, state, limit = 1):
         self._limit = limit
         self._state = state
 
@@ -32,12 +32,14 @@ class MCTS:
         while ((time.now() - start).seconds < self.limit):
             Node.n_sims += 1
             node = self.select_node(root)
-            print("New Node Board:")
-            print(node.state.board)
+            print(f"total sims = {Node.n_sims}, rvisit = {root.visit}, nwins = {root.win}")
+            print(f"New Node Board - curr = {node.state.curr} prog = {node.state.in_progress} \n ")
+            # print(node.state.board)
             next_node = self.expand_node(node)
             result = self.run_simulation(next_node)
             # Update statistics for each node
             print(f"find_next move, result = {result}")
+            # print(next_node.board)
             self.back_propogation(result, next_node)
         print("Exited while loop")
         return self.best_move(root)
@@ -58,16 +60,18 @@ class MCTS:
     # Expands selected node to find potential moves
     def expand_node(self, node):
         # Find legal moves
+        if node.state.in_progress is False:
+            return node
+
         moves = node.state.find_legal_moves()
         print(moves)
-        # print(node.state.board)
         for m in moves:
             # Create new node for each child and add to child array
-            new_state = node.state
-            r = new_state.make_move(m)
+            new_state = copy.deepcopy(node.state)
+            res = new_state.make_move(m)
             # print(vars(new_state))
             new = Node(new_state, m, node)
-            node.add_child(new)
+            node.add_child(new) 
         return random.choice(node.children)
 
    
@@ -77,13 +81,13 @@ class MCTS:
         # Create temporary node and state (board)
         # print(vars(node))
         temp_state = copy.deepcopy(node.state)
-        print(temp_state)
-        result = 0
+        result = temp_state.player
         while temp_state.in_progress is True:
             next_move = temp_state.random_move()
             result = temp_state.make_move(next_move)
             # print(f"run_sim - result = {result}, progress = {temp_state.in_progress}")
-        # print(f"run_sim return - result = {result}")
+        print(f"run_sim return - result = {result}")
+        # print(temp_state.board)
         return result
 
 
@@ -92,24 +96,25 @@ class MCTS:
         # Back propagate through node parernts
         while node.parent is not None:
             node.inc_visit()
-            # print("visit= ",node.visit)
+            # print("visit= ",node.visit, "wins= ", node.win)
             if(node.state.player is result):
                 node.inc_win()
-            
             node = node.parent
-        print("Exiting while loop")
-            # print(vars(node))
-
+        node.inc_visit()
+        if(node.state.player is result):
+                node.inc_win()
 
     def best_move(self, root):
         # Pick node with best statistic
-        children = root.get_children()
+        children = root.children
         if not children:
             print("No children!!!")
             return -1
         else: 
             max_child = children[0]
             for x in children:
+                print(f"nsims = {Node.n_sims}, nvisits = {x.visit} nwins = {x.win} ucb = {x.ucb()}")
+                # print(x.state.board)
                 if x.win/x.visit > max_child.win/max_child.visit:
                     max_child = x
             return max_child.move
@@ -130,10 +135,11 @@ if __name__ == "__main__":
     # the boards are of size 10 because index 0 isn't used
     boards = np.zeros((10, 10), dtype="int8")
     s = [".","X","O"]
-    curr = 0 # this is the current board to play in
+    curr = 1 # this is the current board to play in
 
     # Create global board object
     g_board = Board(boards,curr)
     print(g_board.board)
     test = MCTS(g_board)
     n = test.find_next_move()
+    print(n)

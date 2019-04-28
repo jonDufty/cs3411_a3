@@ -29,7 +29,7 @@ class Node():
         w = float(self.win)
         n = float(self.visit)    #number of sims in this node after the ith move
         if n == 0:
-            return 0
+            return 1000
         c  = 1.414               #sqrt(2)
         t  = float(Node.n_sims)  #total sims after i moves
         # print(f"w = {w} n = {n} c = {c} t = {t}")
