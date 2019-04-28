@@ -69,8 +69,8 @@ class Node():
 
 # NOt sure if we need this at all, currently all it does it reset a count
 class Tree(object):
-    def __init__(self, state):
-        self._root = Node(state) #set the root as an argument for the class
+    def __init__(self, root):
+        self._root = root #set the root as an argument for the class
         self.root.reset_sims()
 
     @property

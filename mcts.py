@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #MCTS implementation by Jon Dufty and Nimrod Wynne
 
-from datetime import datetime, timedelta
+import datetime
 from random import random
 from Board import Board
 from Tree import *
@@ -21,8 +21,9 @@ class MCTS:
         
     def find_next_move(self):
         # create new tree
-        tree = Tree(self._state)
-        root = Tree.root
+        
+        root = Node(self.state, -1)
+        tree = Tree(root)
 
         # populate with nodes
         time = datetime.datetime
@@ -39,15 +40,15 @@ class MCTS:
     # select node to expand based on UCT
     # Traverse through tree recursively until finding leaf
     def select_node(self,node):
-        children = node.get_children()
+        children = node.children
         if not children:
             return None
         else:
-            max = children[0]
+            max_c = children[0]
             for c in children:
-                if c.ucb() > max.ucb():
-                    max = c
-            return self.select_node(max)
+                if c.ucb() > max_c.ucb():
+                    max_c = c
+            return self.select_node(max_c)
 
     # Expands selected node to find potential moves
     def expand_node(self, node):
@@ -56,7 +57,7 @@ class MCTS:
         for m in moves:
             # Create new node for each child and add to child array
             new_state = node.state.make_move(m)
-            new = Node(new_state, move, node)
+            new = Node(new_state, m, node)
             node.add_child(new)
         return random.choice(node.children)
 
@@ -94,3 +95,13 @@ class MCTS:
                 if x.win/x.visit > max_child.win/max_child.visit:
                     max_child = x
             return max_child.move
+
+
+
+"""
+
+./servt -p 12345 &
+./agent.py -p 12345 &
+./randt -p 12345
+
+"""

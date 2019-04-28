@@ -8,8 +8,8 @@ import socket
 import sys
 import numpy as np
 
-from mcts import mcts
-from board import board
+from mcts import MCTS
+from Board import Board
 
 # a board cell can hold:
 #   0 - Empty
@@ -82,8 +82,8 @@ def play():
     #     n = np.random.randint(1,9)
 
     mcts = MCTS(g_board)
-    mcts.find_next_move()
-
+    n = mcts.find_next_move()
+    print("Best move found: ", n)
     
     place(curr, n, 1)
    
