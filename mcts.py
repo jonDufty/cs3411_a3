@@ -87,6 +87,14 @@ class MCTS:
             # print(f"run_sim - result = {result}, progress = {temp_state.in_progress}")
         return result
 
+        """
+while(boardStatus === board.IN_PROGRESS) {
+    tempState.togglePlayer();
+    tempState.randomPlay();
+    boardStatus = tempState.board.checkStatus();
+  }
+        """
+
 
     # Back propogates through nodes to update statistic
     def back_propogation(self, result, node):

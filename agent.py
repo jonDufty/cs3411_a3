@@ -76,11 +76,6 @@ def print_board(board):
 
 # choose a move to play
 def play():
-    #print_board(boards)
-    # just play a random move for now
-    # n = np.random.randint(1,9)
-    # while boards[curr][n] != 0:
-    #     n = np.random.randint(1,9)
     board_copy = copy.deepcopy(g_board)
     print_board(board_copy.board)
     mcts = MCTS(board_copy)
