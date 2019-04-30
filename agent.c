@@ -128,6 +128,7 @@ int agent_third_move(
 */
 int agent_next_move( int prev_move )
 {
+  printf("HELALSDJASKD");
   int this_move;
   m++;
   move[m] = prev_move;
