@@ -15,22 +15,22 @@ typedef struct Node {
     struct Node *parent;
     int win;
     int visit;
-    struct _Node **children;
-} Node;
+    struct Node **children;
+} node;
 
 typedef struct State{
     int board[10][10];
     int curr;
     int player; 
     int b_in_progress;
-} State;
+} state;
 
 int n_sims = 0;
 
 // creates an empty tree node
-TreeNode newNode()
+node* newNode()
 {
-    TreeNode n;
+    Node* n;
     n = malloc(sizeof(Node));
     assert (n != NULL);
     n->win = 0;
@@ -42,16 +42,16 @@ TreeNode newNode()
 }
 
 //Creates node given state info 
-TreeNode createNode(State *state)
+node* createNode(State *state)
 {
-    TreeNode new = newNode();
-    memcpy(new->state, state, sizeof(State));
+    node* new = newNode();
+    memcpy(new->state, state, sizeof(state));
     return new;
 }
 
 
 // Adds a node as a child of a tree
-void addLeaf(TreeNode parent, TreeNode child)
+void addLeaf(node* parent, node* child)
 {
     // Add child to parent
     if(parent == NULL) return;
@@ -69,7 +69,7 @@ void addLeaf(TreeNode parent, TreeNode child)
 }
 
 // Returns ucb value for node
-float ucb(TreeNode t)
+float ucb(node* t)
 {
     float ucb = (float)(((float)t->win/(float)t->visit) + sqrt(log(n_sims)/(double)t->visit));
     return ucb;
