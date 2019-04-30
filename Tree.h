@@ -1,5 +1,6 @@
 // Search Tree ADT for MCTS Search Implemention
 // Take 2 ....
+#include "mcts.h"
 
 typedef struct Node * TreeNode;
 typedef struct Node Node;

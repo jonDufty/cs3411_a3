@@ -15,7 +15,7 @@ typedef struct Node {
     struct Node *parent;
     int win;
     int visit;
-    struct Node **children;
+    struct _Node **children;
 } Node;
 
 typedef struct State{

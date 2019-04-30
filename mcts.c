@@ -11,15 +11,15 @@ int g_nsims = 0;
 
 
 typedef struct MCTS{
-	struct State *state; //this is the board
+	State *state; //this is the board
 	int opponent; 
 	float limit; //this is the time limit
 } MCTS;
 
 
-int state_opponent(struct State *s)
+int state_opponent(State *s)
 {
-	return 3 - s->player;
+	return 3 - (s->player);
 }
 
 Node* select_node(Node *n)
