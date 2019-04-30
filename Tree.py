@@ -1,17 +1,19 @@
 #!/usr/bin/python3
 from Board import Board
 import math
+import copy
 
 
 class Node():
     n_sims = 0
-    def __init__(self, state, move, parent=None):
+    def __init__(self, state, move, level=0, parent=None):
         self._state = state #the state the node represents
         self._parent     = parent #the parent of the node (None if root)
         self._win        = 0 #number of wins at this node
         self._visit      = 0 #number of visits to this node
         self._children   = [] #the children of this node
         self._move       = move
+        self.level       = level
     
 
     #add a child to this node
@@ -34,6 +36,10 @@ class Node():
         # print(f"w = {w} n = {n} c = {c} t = {t}")
         res = float((w / n) + (c * math.sqrt(math.log(t) / n) ))
         return res
+
+    def print_state(self):
+        print(f"D: {self.level} P: {self.player} Curr = {self._parent.curr} M = {self.move} N = {self.win} V = {self.visit} ucb = {self.ucb()} c = {len(self.children)} terminal: {not self.state.in_progress}")
+
 
     # Getters and Setters
     @property
@@ -60,6 +66,9 @@ class Node():
     @property
     def curr(self):
         return self._state.curr
+    @property
+    def player(self):
+        return self._state.player
 
     #incrementor functions
     def inc_sims(self):
@@ -78,6 +87,19 @@ class Tree(object):
     @property
     def root(self):
         return self._root
+
+    def print_tree(self,root):
+        # root.print_state()
+        queue = copy.deepcopy(root.children)
+        i = 0
+        while(i < len(queue)):
+            if queue[i].visit > 0:
+                queue[i].print_state()
+            for c in queue[i].children:
+                queue.append(c)
+            i += 1
+
+        
 '''
     def max_ucb_node(self):
         #get the children of the node

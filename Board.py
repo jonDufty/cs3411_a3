@@ -68,9 +68,10 @@ class Board(object):
 
     # Takes in a move, changes board state, switches player
     # Checks for a winner
-    def make_move(self, move):
+    def make_move(self, move, player):
         # print("move = ",move)
-        self._board[self._curr][move] = self.player
+        self._player = player
+        self._board[self._curr][move] = player
         self._curr = move
         # check winner
         if self.winner(self.player):
@@ -82,8 +83,25 @@ class Board(object):
             self._in_progress = False
             return 0
         else:
-            self.toggle_player()
-        return 0
+            return 0
+
+    def make_move2(self, move, player):
+        # print("move = ",move)
+        self._player = player
+        c = self._curr
+        self._board[self._curr][move] = player
+        winner = self.winner(self.player)
+        full = self.full_board()
+        self._curr = move
+        # check winner
+        if winner:
+            self._in_progress = False 
+            return self.player
+        elif full:
+            self._in_progress = False
+            return 0
+        else:
+            return 0
 
     #select a random move from this node
     def random_move(self):
@@ -92,6 +110,9 @@ class Board(object):
 
     def toggle_player(self):
         self._player = 3 - self.player
+
+    def opponent(self):
+        return (3 - self._player)
 
     def winner(self, p):
         curr = self.board[self.curr]
@@ -107,6 +128,31 @@ class Board(object):
     def full_board(self):
         cells = [i > 0 for i in self.board[self.curr]]
         return sum(cells) >= 9
+
+
+    # print a row
+    # This is just ported from game.c
+    def print_board_row(self,board, a, b, c, i, j, k):
+        s = [".","X","O"]
+        print(" "+s[board[a][i]]+" "+s[board[a][j]]+" "+s[board[a][k]]+" | " \
+                +s[board[b][i]]+" "+s[board[b][j]]+" "+s[board[b][k]]+" | " \
+                +s[board[c][i]]+" "+s[board[c][j]]+" "+s[board[c][k]])
+
+    # Print the entire board
+    # This is just ported from game.c
+    def print_board(self, board):
+        self.print_board_row(board, 1,2,3,1,2,3)
+        self.print_board_row(board, 1,2,3,4,5,6)
+        self.print_board_row(board, 1,2,3,7,8,9)
+        print(" ------+-------+------")
+        self.print_board_row(board, 4,5,6,1,2,3)
+        self.print_board_row(board, 4,5,6,4,5,6)
+        self.print_board_row(board, 4,5,6,7,8,9)
+        print(" ------+-------+------")
+        self.print_board_row(board, 7,8,9,1,2,3)
+        self.print_board_row(board, 7,8,9,4,5,6)
+        self.print_board_row(board, 7,8,9,7,8,9)
+        print()
 
 ''' Not actually sure if we need this '''
 #state class contains the board, current 'subboard' and the player whose turn it is
