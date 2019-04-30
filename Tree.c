@@ -11,11 +11,11 @@
 
 
 typedef struct _Node {
-    struct State *state;
-    struct Node *parent;
+    struct _State *state;
+    struct _Node *parent;
     int win;
     int visit;
-    struct Node **children;
+    struct _Node **children;
 } Node;
 
 int n_sims = 0;

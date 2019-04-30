@@ -1,3 +1,5 @@
+
+
 #include "mcts.h"
 
 #include <time.h>
@@ -8,7 +10,7 @@ typedef struct _State{
 	int board[10][10];
 	int curr;
 	int player; 
-	int b_in_progress = 1;
+	int b_in_progress;
 } State;
 
 typedef struct _MCTS{
@@ -18,7 +20,7 @@ typedef struct _MCTS{
 } MCTS;
 
 
-int state_opponent(struct State *s);
+int state_opponent(struct State *s)
 {
 	return 3 - s->player;
 }
