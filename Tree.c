@@ -7,7 +7,7 @@
 #include <string.h>
 #include <math.h>
 #include "Tree.h"
-#include "mcts.h"
+
 #include "common.h"
 
 
@@ -114,6 +114,7 @@ int state_opponent(state *s)
 
 node* select_node(node *n)
 {
+	printf("select node||\n");
 	while(n->children[0] != NULL)
 	{
 		node **children = n->children;
@@ -127,26 +128,30 @@ node* select_node(node *n)
 			}
 		}
 	}
+	printf("end of select node||\n");
 	return n;
 }
 
 int run_simulation(node *n)
 {
 	//run the simulation on the nodes
-
+	printf("run sim||\n");
     state *temp_state = malloc(sizeof(state));
     int result = temp_state->player;
     while(temp_state->b_in_progress == 1)
     {
-		int *moves = find_legal_moves(temp_state->board[temp_state->curr]);
-    	int next_move = random_move(moves);
+    	int num_moves = 0;
+		int *moves = find_legal_moves(temp_state->board[temp_state->curr], &num_moves);
+    	int next_move = random_move(moves, num_moves);
     	result = user_make_move(temp_state, next_move, state_opponent(temp_state));
     }
+    printf("endof run sim||\n");
     return result;
 }
 void back_propogation(int result, node *n)
 {
 	//backprop through the nodes to the parent
+	printf("backprop||\n");
     node *node = n;
     while (node->parent != NULL)
     {
@@ -158,11 +163,13 @@ void back_propogation(int result, node *n)
     	node = node->parent;
     }
     node->visit++;
+    printf("end backprop||\n");
 }
 
 int find_next_move(mcts *mcts, state *in_state)
 {
 	//create the root node
+	printf("Finding Next Move||\n");
 	node *root = malloc(sizeof(node*));
 	root->state = in_state;
 
@@ -174,6 +181,7 @@ int find_next_move(mcts *mcts, state *in_state)
 	double time_taken = 0;
 	while(time_taken < 3.00)
 	{
+		printf("while loop||\n");
 		g_nsims++;
 		node *n = select_node(root);
 		node *next_node = expand_node(mcts, n);
@@ -195,10 +203,11 @@ node* expand_node(mcts *mcts, node *n)
 	{
 		return n;
 	}
-	int *moves = find_legal_moves(n->state->board[n->state->curr]);
+	int len = 0;
+	int *moves = find_legal_moves(n->state->board[n->state->curr], &len);
 	int gl_opponent = state_opponent(n->state);
 	int opponent    = state_opponent(mcts->state);
-	int len = sizeof(moves)/sizeof(int);
+	
 	for(int i = 0; i < len; i++)
 	{
 		int res = user_make_move(n->state, moves[i], opponent);
@@ -213,6 +222,7 @@ node* expand_node(mcts *mcts, node *n)
 		}
         addLeaf(n, new);
 	}
+	printf("choosing random child||\n");
 	return n->children[rand() % n->num_children];
 }
 
@@ -263,7 +273,7 @@ int fullboard( int bb[] )
   return( c == 10 );
 }
 
-int* find_legal_moves(int bb[])
+int* find_legal_moves(int bb[], int *size)
 {
 	// find amount of moves
 	int i =0;
@@ -271,6 +281,7 @@ int* find_legal_moves(int bb[])
 	for (i = 1; i < 10; i++){
 		if (bb[i] ==0) c++;
 	}
+	*size = c;
 	int *legal = malloc(sizeof(int)*c);
 	c = 0;
 	for (i=1; i<10; i++){
@@ -282,8 +293,8 @@ int* find_legal_moves(int bb[])
 	return legal;
 }
 
-int random_move(int *moves){
-	int len = sizeof(moves)/sizeof(int);
+int random_move(int *moves, int *size){
+	int len = *size;
 	int i = rand() % len;
 	return moves[i];
 }
