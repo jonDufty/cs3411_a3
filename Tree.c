@@ -7,7 +7,6 @@
 #include <string.h>
 #include <math.h>
 #include "Tree.h"
-#include "mcts.h"
 #include "common.h"
 
 

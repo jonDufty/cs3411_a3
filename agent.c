@@ -12,7 +12,6 @@
 #include "common.h"
 #include "agent.h"
 #include "game.h"
-#include "mcts.h"
 #include "Tree.h"
 
 #define MAX_MOVE 81
