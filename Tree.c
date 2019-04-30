@@ -23,6 +23,7 @@ typedef struct Node {
     int win;
     int visit;
     struct Node **children;
+    int num_children;
 } node;
 
 typedef struct State{
@@ -45,6 +46,7 @@ node* newNode()
     n->parent = NULL;
     n->children = calloc(9,sizeof(node));
     n->state = NULL;
+    n->num_children = 0;
     return n;
 }
 
@@ -93,7 +95,8 @@ node* select_node(node *n)
 	{
 		node **children = n->children;
 		n = children[0];
-		for(int i = 0; i < sizeof(children) / sizeof(node*); i++)
+		int num_children = n->num_children;
+		for(int i = 0; i < num_children; i++)
 		{
 			if(ucb(children[i]) > ucb(n))
 			{
@@ -107,7 +110,7 @@ node* select_node(node *n)
 int run_simulation(node *n)
 {
 	//run the simulation on the nodes
-    state *temp_state = malloc(sizeof(*state));
+    state *temp_state = malloc(sizeof(state*));
     int result = temp_state->player;
     while(temp_state->b_in_progress == 1)
     {
@@ -138,8 +141,9 @@ int find_next_move(mcts *mcts, struct state *in_state)
 
 	
 	node *root = malloc(sizeof(node*));
-	root->s = in_state;
+	root->state = in_state;
 
+	node *next_node = NULL;
 
 	clock_t start = clock();
 	clock_t end = start;
@@ -149,7 +153,7 @@ int find_next_move(mcts *mcts, struct state *in_state)
 	{
 		g_nsims++;
 		node *node = select_node(root);
-		node *next_node = expand_node(mcts, node);
+		next_node = expand_node(mcts, node);
 		int result = run_simulation(next_node);
 
 		back_propogation(result, next_node);
@@ -184,8 +188,8 @@ node* expand_node(mcts *mcts, node *n)
             n->win = -1000;
 		}
         add_leaf(n, new);
+        n->num_children++;
 	}
-	int array_size = sizeof(n->children)/sizeof(node*);
-	return n->children[rand() % array_size];
+	return n->children[rand() % n->num_children];
 }
 
