@@ -194,7 +194,7 @@ int server_step(
     gettimeofday( &tod_fin, NULL );
     move_msec = 1 + (tod_fin.tv_sec -tod_start.tv_sec )*1000
                   + (tod_fin.tv_usec-tod_start.tv_usec)/1000;
-    msec_left[player] -= move_msec;
+    msec_left[player] -= 0; //move_msec;
     if( move_scanned ) {
       game_status = make_move( player,m,move,board );
     }
