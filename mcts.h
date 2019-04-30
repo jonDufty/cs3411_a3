@@ -7,20 +7,18 @@
 #include "Tree.h"
 
 
+typedef struct MCTS mcts;
 
-typedef struct State State;
-typedef struct MCTS MCTS;
-
-int state_opponent(struct State *s);
+int state_opponent(state *s);
 
 int find_next_move();
 
-Node * select_node(Node *n);
+node * select_node(node *n);
 
-Node * expand_node(MCTS *mcts, Node *n);
+node * expand_node(mcts *mcts, node *n);
 
-int run_simulation(Node *n);
+int run_simulation(node *n);
 
-void back_propogation(int result, Node *n);
+void back_propogation(int result, node *n);
 
-int best_move(Node *root);
+int best_move(node *root);

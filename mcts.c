@@ -10,23 +10,23 @@
 int g_nsims = 0;
 
 
-typedef struct MCTS{
-	State *state; //this is the board
+typdef struct MCTS{
+	state *state; //this is the board
 	int opponent; 
 	float limit; //this is the time limit
-} MCTS;
+} mcts;
 
 
-int state_opponent(State *s)
+int state_opponent(state *s)
 {
 	return 3 - (s->player);
 }
 
-Node* select_node(Node *n)
+node* select_node(node *n)
 {
 	while(n->children[0] != NULL)
 	{
-		struct Node *children[] = n->children;
+		node **children = n->children;
 		n = children[0];
 		for(int i = 0; i < sizeof(children) / sizeof(Node*); i++)
 		{
@@ -38,7 +38,7 @@ Node* select_node(Node *n)
 	}
 	return n;
 }
-Node* expand_node(MCTS *mcts, Node *n)
+node* expand_node(mcts *mcts, node *n)
 {
 	if(n->state->b_in_progress == 0)
 	{
@@ -50,10 +50,10 @@ Node* expand_node(MCTS *mcts, Node *n)
 	for(int i = 0; i < moves; i++)
 	{
 		int res = make_move(moves[i], opponent, n->state);
-		State *new_state = malloc(sizeof(*State));
+		state *new_state = malloc(sizeof(*State));
 		memcpy(new_state, n->state, sizeof(*State));
 
-		Node* new = createNode(new_state);
+		node* new = createNode(new_state);
 
 		if(res == gl_opponent)
 		{
@@ -64,10 +64,10 @@ Node* expand_node(MCTS *mcts, Node *n)
 	int array_size = sizeof(n->children)/sizeof(*Node);
 	return n->children[rand() % array_size];
 }
-int run_simulation(Node *n)
+int run_simulation(node *n)
 {
 	//run the simulation on the nodes
-    State *temp_state = malloc(sizeof(*State));
+    state *temp_state = malloc(sizeof(*State));
     int result = temp_state->player;
     while(temp_state->b_in_progress == 1)
     {
@@ -76,10 +76,10 @@ int run_simulation(Node *n)
     }
     return result;
 }
-void back_propogation(int result, Node *n)
+void back_propogation(int result, node *n)
 {
 	//backprop through the nodes to the parent
-    Node *node = n;
+    node *node = n;
     while (node->parent != NULL)
     {
     	node->visit++;
@@ -92,12 +92,12 @@ void back_propogation(int result, Node *n)
     node->visit++;
 }
 
-int find_next_move(MCTS *mcts, struct State *in_state)
+int find_next_move(mcts *mcts, struct state *in_state)
 {
 	//create the root node
 
 	
-	struct Node *root = malloc(sizeof(*Node));
+	node *root = malloc(sizeof(*Node));
 	root->s = in_state;
 
 
@@ -108,8 +108,8 @@ int find_next_move(MCTS *mcts, struct State *in_state)
 	while(time_taken < 3.00)
 	{
 		g_nsims++;
-		struct Node *node = select_node(tree);
-		struct Node *next_node = expand_node(node);
+		node *node = select_node(tree);
+		node *next_node = expand_node(node);
 		int result = run_simulation(next_node);
 
 		back_propogation(result, next_node);
