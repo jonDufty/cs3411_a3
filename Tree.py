@@ -73,8 +73,8 @@ class Node():
     #incrementor functions
     def inc_sims(self):
         Node.n_sims += 1
-    def inc_win(self):
-        self._win += 1
+    def inc_win(self,w=1):
+        self._win += w
     def inc_visit(self):
         self._visit += 1
 
