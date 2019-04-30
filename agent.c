@@ -22,6 +22,12 @@ int move[MAX_MOVE+1];
 int player;
 int m;
 
+/**  Additional Funciton Headers  **/
+int user_make_move(StatePtr, int, int);
+int winner( int p, int bb[10] );
+int fullboard( int bb[] );
+int* find_legal_moves(int bb[]);
+
 /*********************************************************//*
    Print usage information and exit
 */
@@ -173,19 +179,18 @@ void agent_cleanup()
   // nothing to do here
 }
 
-int make_move(State *state, int move, int p)
+int user_make_move(StatePtr state, int move, int p)
 {
 	// Modify state board
 	int c = state->curr;
 	state->board[c][m] = p;
 	state->player = p;
 
-	w = winner(state->board[c],p);
-	f = full_board(state->board[c]);
+	int w = winner(p, state->board[c]);
+	int f = full_board(state->board[c]);
 	// Update player/curr
 	state->curr = move;
 	// Check Winner Status
-	int result = 0;
 	if (w){
 		state->b_in_progress = 0;
 		return p;
@@ -212,7 +217,7 @@ int winner( int p, int bb[10] )
 /*********************************************************
    Return TRUE if this sub-board is full
 */
-int full_board( int bb[] )
+int fullboard( int bb[] )
 {
   int c=1;
   while( c <= 9 && bb[c] != EMPTY ) {
@@ -230,7 +235,7 @@ int* find_legal_moves(int bb[])
 		if (bb[i] ==0) c++;
 	}
 	int *legal = malloc(sizeof(int)*c);
-	c = 0
+	c = 0;
 	for (i=1; i<10; i++){
 		if (bb[i] == 0) {
 			legal[c] = i;

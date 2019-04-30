@@ -3,7 +3,7 @@
 
 typedef struct Node * TreeNode;
 typedef struct Node Node;
-typedef struct State State;
+typedef struct State *StatePtr;
 // creates an empty tree node
 TreeNode newNode();
 

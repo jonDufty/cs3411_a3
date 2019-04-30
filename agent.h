@@ -4,6 +4,7 @@
  *  COMP3411/9414/9814 Artificial Intelligence
  *  Alan Blair, CSE, UNSW
  */
+
 extern int   port;
 extern char *host;
 
@@ -29,4 +30,7 @@ void agent_gameover( int result, int cause );
 
  //  called at the end of the series of games
 void agent_cleanup();
+
+// Additional Functions
+
 
