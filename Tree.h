@@ -41,6 +41,6 @@ float ucb(node* n);
 int user_make_move(state*, int, int);
 int winner( int p, int bb[10] );
 int fullboard( int bb[] );
-int* find_legal_moves(int bb[]);
-int random_move(int *);
+int* find_legal_moves(int bb[], int *size);
+int random_move(int *, int size);
 

@@ -181,11 +181,13 @@ int main(int argc, char** argv)
       agent_init();
     }
     else if(sscanf(client_buf,"start(%c).",&ch) == 1) {
+      printf("Agent Start\n");
       player = ( ch == 'x' ) ? 0 : 1 ;
       agent_start( player );
     }
     else if(sscanf(client_buf,"second_move(%d,%d).",
                    &board_num,&prev_move) == 2 ) {
+      printf("Second Move\n");
       client_second_move( board_num,prev_move );
     }
     else if(sscanf(client_buf,"third_move(%d,%d,%d).",
@@ -193,6 +195,7 @@ int main(int argc, char** argv)
       client_third_move( board_num,first_move,prev_move );
     }
     else if(sscanf(client_buf,"next_move(%d).",&prev_move)==1){
+      printf("Client Next Move\n");
       client_next_move( prev_move );
     }
     else if(sscanf(client_buf,"last_move(%d).",&prev_move)==1){
