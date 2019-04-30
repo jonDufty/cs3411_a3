@@ -7,13 +7,17 @@ typedef struct State state;
 
 typedef struct MCTS mcts;
 
+mcts* new_mcts(state *, float);
+
+state* new_state(int[10][10], int, int);
+
 int state_opponent(state *s);
 
-int find_next_move();
+int find_next_move(mcts *, state *);
 
 node * select_node(node *n);
 
-node * expand_node(mcts *mcts, node *n);
+node * expand_node(mcts *m, node *n);
 
 int run_simulation(node *n);
 
@@ -33,4 +37,10 @@ void addLeaf(node* parent, node* leaf);
 // Returns ucb value for node
 float ucb(node* n);
 
+/**  Additional State Headers  **/
+int user_make_move(state*, int, int);
+int winner( int p, int bb[10] );
+int fullboard( int bb[] );
+int* find_legal_moves(int bb[]);
+int random_move(int *);
 
