@@ -33,4 +33,10 @@ void addLeaf(node* parent, node* leaf);
 // Returns ucb value for node
 float ucb(node* n);
 
+/**  Additional State Headers  **/
+int user_make_move(state*, int, int);
+int winner( int p, int bb[10] );
+int fullboard( int bb[] );
+int* find_legal_moves(int bb[]);
+int random_move(int *);
 
