@@ -37,6 +37,27 @@ typedef struct State{
 int n_sims = 0;
 
 // creates an empty tree node
+mcts* new_mcts(state *s, float lim){
+	mcts *m = malloc(sizeof(mcts));
+
+	memcpy(m->state, s, sizeof(state));
+	m->limit = lim;
+
+	return m;
+}
+
+state* new_state(int board[10][10], int curr, int player)
+{
+	state *s = malloc(sizeof(state));
+
+	memcpy(s->board, board, sizeof(int)*10*10);
+	s->curr = curr;
+	s->player = player;
+	s->b_in_progress = 1;
+
+	return s;
+}
+
 node* newNode()
 {
     node* n;
@@ -138,8 +159,6 @@ void back_propogation(int result, node *n)
 int find_next_move(mcts *mcts, state *in_state)
 {
 	//create the root node
-
-	
 	node *root = malloc(sizeof(node*));
 	root->state = in_state;
 
