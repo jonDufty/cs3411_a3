@@ -10,13 +10,20 @@
 #include "mcts.h"
 
 
-typedef struct _Node {
+typedef struct Node {
     struct State *state;
     struct Node *parent;
     int win;
     int visit;
     struct Node **children;
 } Node;
+
+typedef struct State{
+    int board[10][10];
+    int curr;
+    int player; 
+    int b_in_progress;
+} State;
 
 int n_sims = 0;
 
