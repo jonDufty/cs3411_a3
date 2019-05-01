@@ -195,7 +195,7 @@ int main(int argc, char** argv)
       client_third_move( board_num,first_move,prev_move );
     }
     else if(sscanf(client_buf,"next_move(%d).",&prev_move)==1){
-      printf("Client Next Move\n");
+      printf("Client Next Move - move = %d\n", prev_move);
       client_next_move( prev_move );
     }
     else if(sscanf(client_buf,"last_move(%d).",&prev_move)==1){

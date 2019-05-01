@@ -137,12 +137,12 @@ int agent_next_move( int prev_move )
   board[move[m-1]][move[m]] = !player;
   m++;
   do {
-    // this_move = 1 + random()% 9;
-    state *s = new_state(board, move[m], (3-player));
+    state *s = new_state(board, move[m-1], (3-player));
     float limit = 2;
-    mcts *m = new_mcts(s, limit);
-
-    this_move = find_next_move(m,s);
+    mcts *mc = new_mcts(s, limit);
+    printf("Data structs exist curr = %d\n", move[m-1]);
+    // this_move = 1 + random()% 9;
+    this_move = find_next_move(mc,s);
    
   } while( board[prev_move][this_move] != EMPTY );
   move[m] = this_move;
