@@ -8,8 +8,8 @@ CFLAGS = -Wall -g -O3
 
 default: agent
 
-agent: agent.o client.o game.o Tree.o common.h agent.h game.h Tree.h
-	$(CC) $(CFLAGS) -o agent agent.o client.o game.o Tree.o -lm
+agent: agent.o client.o game.o common.h agent.h game.h 
+	$(CC) $(CFLAGS) -o agent agent.o client.o game.o
 
 servt: servt.o game.o common.h game.h agent.h
 	$(CC) $(CFLAGS) -o servt servt.o game.o

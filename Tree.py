@@ -3,17 +3,24 @@ from Board import Board
 import math
 import copy
 
-
+'''
+Node class represents individual states in search tree for MCTS
+These are used to traverse through different state possibilities, and record
+statisitcs for each move
+'''
 class Node():
-    n_sims = 0
+
+    #Class variable to keep track of total simulations in the tree 
+    n_sims = 0 
+    
     def __init__(self, state, move, level=0, parent=None):
-        self._state = state #the state the node represents
-        self._parent     = parent #the parent of the node (None if root)
-        self._win        = 0 #number of wins at this node
-        self._visit      = 0 #number of visits to this node
-        self._children   = [] #the children of this node
-        self._move       = move
-        self.level       = level
+        self._state = state         #the state (class) the node represents
+        self._parent     = parent   #the parent of the node (None if root)
+        self._win        = 0        #number of wins at this node
+        self._visit      = 0        #number of visits to this node
+        self._children   = []       #the children of this node (i.e. possible moves)
+        self._move       = move     #the move taken to get to this state
+        self.level       = level    #The depth of the tree at this point, used for debugging mainly
     
 
     #add a child to this node
@@ -25,7 +32,8 @@ class Node():
         Node.n_sims = 0
 
     
-    #Finds the max ucb value of a node's children
+    #Finds the max Upper Confidence Bound (UCB) value of a node's children
+    # To give an indication of which node to picj next
     def ucb(self):
         w = float(self.win)
         n = float(self.visit)  
@@ -36,10 +44,6 @@ class Node():
         # print(f"w = {w} n = {n} c = {c} t = {t}")
         res = float((w / n) + (c * math.sqrt(math.log(t) / n) ))
         return res
-
-    def print_state(self):
-        print(f"D: {self.level} P: {self.player} Curr = {self._parent.curr} M = {self.move} N = {self.win} V = {self.visit} ucb = {self.ucb()} c = {len(self.children)} terminal: {not self.state.in_progress}")
-
 
     # Getters and Setters
     @property
@@ -78,65 +82,14 @@ class Node():
     def inc_visit(self):
         self._visit += 1
 
-# NOt sure if we need this at all, currently all it does it reset a count
+'''
+Tree Class used to track root of tree and reset total simulation count each time a new tree is created
+'''
 class Tree(object):
     def __init__(self, root):
-        self._root = root #set the root as an argument for the class
-        self.root.reset_sims()
+        self._root = root       #set the root as an argument for the class
+        self.root.reset_sims()  #Called when initialised to reset the class variable in Node
 
     @property
     def root(self):
         return self._root
-
-    def print_tree(self,root):
-        # root.print_state()
-        queue = copy.deepcopy(root.children)
-        i = 0
-        while(i < len(queue)):
-            if queue[i].visit > 0:
-                queue[i].print_state()
-            for c in queue[i].children:
-                queue.append(c)
-            i += 1
-
-        
-'''
-    def max_ucb_node(self):
-        #get the children of the node
-        children = self.root.get_children()
-        #apply the ucb function to the entire list
-        ucb_list = children
-        map(ucb, ucb_list)
-        #return the max value from the child list, this gets the max ucb list elem and returns the
-        #corresponding 'children' elements
-        max_ucb = ucb_list[0]
-        i = 0
-        max_index = 0
-        for x in ucb_list:
-            if x > max_ucb:
-                max_ucb = x
-                max_index = i
-            i += 1
-        return children[i]
-'''    
-
-
-
-
-'''
-    Previous Functions, kept just in case
-    #set the parent of this node to the one passed into the argument
-    # Not necessary
-    def set_parent(Node):
-        self._parent = Node
-    def set_win(win):
-        self.win = win
-    def set_visit(visit):
-        self._visit = visit
-'''
-'''
-    #update the positions on the board with the move
-    def make_move(self,move):
-        self._state.set_board(move.get_board())
-        self._state.set_curr(move.get_curr())
-'''

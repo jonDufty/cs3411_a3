@@ -130,20 +130,13 @@ int agent_third_move(
 */
 int agent_next_move( int prev_move )
 {
-  printf("HELALSDJASKD");
   int this_move;
   m++;
   move[m] = prev_move;
   board[move[m-1]][move[m]] = !player;
   m++;
   do {
-    state *s = new_state(board, move[m-1], (3-player));
-    float limit = 2;
-    mcts *mc = new_mcts(s, limit);
-    printf("Data structs exist curr = %d\n", move[m-1]);
-    // this_move = 1 + random()% 9;
-    this_move = find_next_move(mc,s);
-   
+    this_move = 1 + random()% 9;
   } while( board[prev_move][this_move] != EMPTY );
   move[m] = this_move;
   board[move[m-1]][this_move] = player;

@@ -9,13 +9,19 @@ from Tree import *
 
 t_moves = 0
 
+'''
+Overarching MCTS implementation and methods
+Contains functions for 4 main stated of MCTS algorithm
+'''
 class MCTS:
+    # Class Variable to track how many moves have been made to adjust time of sims
+    t_moves = 0
     def __init__(self, state, limit = 3):
-        self._limit = limit
-        self._state = state
-        self._move_lim = 500
+        self._limit = limit        #Time limits for MCTS
+        self._state = state        #Initial starting state for MCTS
+        self._move_lim = 500       #Move Limit for MCTS
 
-    # Getter method
+    # Getter methods
     @property
     def state(self):
         return self._state
@@ -23,28 +29,41 @@ class MCTS:
     def limit(self):
         return self._limit
         
+    # Overarching Function, calls each step before determining optimal move
     def find_next_move(self):
-        global t_moves
-        t_moves += 2
-        # create new tree
+        
+        MCTS.t_moves += 2
+        # create new tree and root node
         root = Node(copy.deepcopy(self.state), -1)
         root.state._player = self.state.opponent()
         tree = Tree(root)
-        # populate with nodes
+
+        if MCTS.t_moves < 10:
+            self._limit = 2
+        elif MCTS.t_moves >= 10 and MCTS.t_moves< 19:
+            self._limit = 4
+        else:
+            self._limit = 3
+
+        # Set time limites
         time = datetime.datetime
         start = time.now()
         while ((time.now() - start).seconds < self.limit):
         # while (Node.n_sims < self._move_lim):
+            # Each while loop involves 1 simulation
             Node.n_sims += 1
+            # Select node based on best ucb
             node = self.select_node(root)
+            # Expand node for children nodes and pick random node
             next_node = self.expand_node(node)
+            # Conduct random simulation playout
             result = self.run_simulation(next_node)
-            # Update statistics for each node
+            # Update statistics for each node through back prop
             if next_node.state.in_progress is False:
+                # If the node is already a terminal state, back-prop has a higher weighting
                 self.back_propogation(result, next_node, 10)
             self.back_propogation(result, next_node, 1)
-        # if t_moves > 30:
-            # tree.print_tree(root)
+
         return self.best_move(root)
 
     # select node to expand based on UCB
@@ -60,40 +79,38 @@ class MCTS:
 
     # Expands selected node to find potential moves
     def expand_node(self, node):
-        # don't expand node if it is an end state
+        # don't expand node if it is a terminal state
         if node.state.in_progress is False:
             return node
-        # Find legal moves
+
         moves = node.state.find_legal_moves()
-        # player = self.state.player
-        gl_opponent = self.state.opponent()
-        opponent = node.state.opponent()
+        global_opponent = self.state.opponent()  #Opponent for actual game
+        opponent = node.state.opponent()         #Opponent with respect to the current state
+
         for m in moves:
             # Create new node for each child and add to child array
             new_state = copy.deepcopy(node.state)
             res = new_state.make_move2(m, opponent)
             new = Node(new_state, m, node.level+1, node)
-            if res == gl_opponent:
-                node._win = -100000
+            if res == global_opponent:
+                # If the child leads to an opponent winning next move, down grade the ucb so it doesn't get picked
+                node._win = -100000 
                 node.state._in_progress = False
             node.add_child(new) 
         return random.choice(node.children)
 
    
-    # Run simulation for expanded node
-    # Randomly select down until an end state is reached
+    # Randomly simulate a game playout for expanded node
     def run_simulation(self, node):
-        # Create temporary node and state (board)
         if node.state.in_progress is False:
             return node.state.player
 
+        # Create temporary node and state (board)
         temp_state = copy.deepcopy(node.state)
         result = 0
-        # i = 0
         while temp_state.in_progress is True:
             next_move = temp_state.random_move()
             result = temp_state.make_move2(next_move, temp_state.opponent())
-            # i += 1
         return result
 
 
@@ -105,50 +122,17 @@ class MCTS:
             if(node.state.player is result):
                 node.inc_win(inc)
             node = node.parent
-        node.inc_visit()
+        # Increment visits for root node
+        node.inc_visit() 
 
+    # Selects child node (from root) with best win/visit ratio
     def best_move(self, root):
-        global t_moves
-        # Pick node with best statistic
         children = root.children
-        print("\n")
         if not children:
-            print("No children!!!")
             return -1
         else: 
             max_child = children[0]
             for x in children:
-                x.print_state()
                 if x.win/x.visit > max_child.win/max_child.visit:
                     max_child = x
-            # print(root.board[root.curr])
-            # print(root.board)
-            print("legal moves = ", root.state.find_legal_moves())
-            print("best move = ",max_child.move)
-            print(Node.n_sims)
             return max_child.move
-
-
-
-"""
-
-./servt -p 12345 &
-./agent.py -p 12345 &
-./randt -p 12345
-
-"""
-
-# if __name__ == "__main__":
-#     import numpy as np
-#     import random
-#     # the boards are of size 10 because index 0 isn't used
-#     boards = np.zeros((10, 10), dtype="int8")
-#     s = [".","X","O"]
-#     curr = 1 # this is the current board to play in
-
-#     # Create global board object
-#     g_board = Board(boards,curr)
-#     print(g_board.board)
-#     test = MCTS(g_board)
-#     n = test.find_next_move()
-#     print(n)

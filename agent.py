@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-# Sample starter bot by Zac Partridge
-# Contact me at z.partridge@unsw.edu.au
+# Sample starter code by Zac Partridge - z.partridge@unsw.edu.au
 # 06/04/19
-# Feel free to use this and modify it however you wish
+# Agent Adaption by Jonathan Dufty and Nimrod Wynne
 
 import socket
 import sys
@@ -20,75 +19,19 @@ from Board import Board
 # the boards are of size 10 because index 0 isn't used
 boards = np.zeros((10, 10), dtype="int8")
 s = [".","X","O"]
-curr = 0 # this is the current board to play in
-
-#g_board is the global board class object
+#g_board is the global board class object. Curr is the current cub-board
+curr = 0
 g_board = Board(boards, curr)
-
-# print a row
-# This is just ported from game.c
-def print_board_row(board, a, b, c, i, j, k):
-    print(" "+s[board[a][i]]+" "+s[board[a][j]]+" "+s[board[a][k]]+" | " \
-             +s[board[b][i]]+" "+s[board[b][j]]+" "+s[board[b][k]]+" | " \
-             +s[board[c][i]]+" "+s[board[c][j]]+" "+s[board[c][k]])
-
-# Print the entire board
-# This is just ported from game.c
-def print_board(board):
-    print_board_row(board, 1,2,3,1,2,3)
-    print_board_row(board, 1,2,3,4,5,6)
-    print_board_row(board, 1,2,3,7,8,9)
-    print(" ------+-------+------")
-    print_board_row(board, 4,5,6,1,2,3)
-    print_board_row(board, 4,5,6,4,5,6)
-    print_board_row(board, 4,5,6,7,8,9)
-    print(" ------+-------+------")
-    print_board_row(board, 7,8,9,1,2,3)
-    print_board_row(board, 7,8,9,4,5,6)
-    print_board_row(board, 7,8,9,7,8,9)
-    print()
-
-
-# #is board state a winnning position
-# def is_board_state_win(player, board):
-#     print("on board ", board)
-#     curr_board = [1,1,1,0,0,0,0,0,0]
-#     if curr_board[1] == player and curr_board[2] == player and curr_board[3] == player:
-#         return player
-#     if curr_board[1] == player and curr_board[4] == player and curr_board[7] == player:
-#         return player
-#     if curr_board[1] == player and curr_board[5] == player and curr_board[9] == player:
-#         return player
-#     if curr_board[3] == player and curr_board[6] == player and curr_board[9] == player:
-#         return player
-#     if curr_board[4] == player and curr_board[5] == player and curr_board[6] == player:
-#         return player
-#     if curr_board[7] == player and curr_board[8] == player and curr_board[9] == player:
-#         return player
-#     elif len(find_legal_moves()) > 0:
-#         #continue playing
-#         return 3
-#     else: 
-#         #draw
-#         return 0
-
-
 
 # choose a move to play
 def play():
-    #print_board(boards)
-    # just play a random move for now
-    # n = np.random.randint(1,9)
-    # while boards[curr][n] != 0:
-    #     n = np.random.randint(1,9)
+    # Create copy of global board to pass into MCTS function
+    #  (so to not update global board when simulating)
     board_copy = copy.deepcopy(g_board)
-    print_board(board_copy.board)
     mcts = MCTS(board_copy)
     n = mcts.find_next_move()
-    print("Best move found: ", n)
     
     place(curr, n, 1)
-    print_board(g_board.board)
     return n
 
 # place a move in the global boards
