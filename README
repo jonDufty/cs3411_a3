@@ -4,4 +4,24 @@ Expalnation of Algo
 -Data Structures used
 -Reason for Python then C switch (if we finish in time)
 -Design Decisions
--Criticism of designs
+-Criticism of designs (!)
+
+"Briefly describe how your program works, including any algorithms and data structures employed, and explain any design decisions you made along the way"
+
+We decided to implement a version of the Monte Carlo Tree Search (MCTS) to solve this problem. We decided on this search method as it appeared to be a popular game playing algorithm which converged into minimax. Due to the high branching factor, we speculated that minimax would take too long, so we decided to use MCTS instead. Our MCTS algorithm works by assigning a probability or heuristic know as UCB to each node to estimate how strong of an option this is. The strongest node is then expanded and its children are examined. One child is picked and a simulation is run from this child's state. This simulation is played by picking random legal moves until a terminal state is reached. The result of the simulation is recorded. Now the algorithm backpropogates to the root node. Each node contains two variables: visit and win. These keep track of how many visits each node has and how many wins the node has too. When a simulation is complete, the algorithm back propogates up to the root node, incrementing the visit value on all nodes it passes through (and the win value if the simulation finished in a win). Lastly, root's child nodes are examined and the node with the greatest number of visits is picked as the best move to be played from the current state of play. 
+
+All in all, the algorithm can be broken down into four main steps:
+- Selection: the best option is selected from the root's children
+- Expansion: the node just selected is expanded. 
+- Simulation: a game is played at each of the expanded nodes and the result is tracked
+- Backpropogation: using the result, we travel up the tree, updating the values at every node we pass through
+
+We used data structures that would be found in most trees. We created a Board class that we used to store the state of each play. The Board class contains a 10 by 10 numpy array as well as the current sub-board being played in, the current player, and a boolean representing whether it is a terminal state. The Board class also contained functions such as find_legal_moves(), make_move(), and random_move() that found all possible moves from a given state, played a move, or played a random move respectively. 
+
+The other data structure we implmented and made good use of was the Node class. Each object of this class represented a node in the search tree and contained the variables that would be used in backpropogation and other functions. Each Node contained a children list and a parent variable used to represent paths/branches in the tree. The ucb function was also implmented inside the Node.
+
+We implemented our whole search process within a class called mcts. This contains the bulk of our code and also the four steps (slection, expansion, simulation, backpropogation). Our find_next_move() functio within mcts contains a while loop that runs the four steps as much as possible in a given time period. The longer these four steps are left to run, the better the next move found will be as our mcts algorithm returns better results as more simulations are run. We found the optimal time the while loop should run is roughly three seconds as any shorter decreases accuracy considerably and any longer results in a time-out loss.   
+
+We made a few design decisions while creating our algorithm. One of them was to give very low (<-1000) win scores to states that resulted in a loss. We thought that this would decreases how many nodes were explored as 'bad' nodes were made very clear to the algorithm. We also made the descion to make nodes that result in a terminal state more attractive to the algorithm. If our simulation encountered a terminal state """"""""""""""""""
+
+There are a few critsisms that can be made of our design. For starters, our algorithm runs slower than desired. One of the contributing factors in python's inherent speeds compared to other languages. Our MCTS preforms better when more simulations are run on each possible node, so increasing the speed of the algorithm would lead to an increase in accuracy. Switching languages to something faster (like C) would lead to a better, overall solution. 
